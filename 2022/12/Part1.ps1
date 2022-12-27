@@ -111,7 +111,7 @@ function Get-Neighbours {
             continue
         }
         # Check if the neighbour is a valid transition (same letter or next letter in the alphabet)
-        elseif (($neighbour.letter -match $transitionsList[$actualTransition]) -or ($neighbour.letter -match $transitionsList[$actualTransition + 1]) -or ($neighbour.letter -match $transitionsList[$actualTransition - 1])) {
+        elseif (($neighbour.letter -match $transitionsList[$actualTransition]) -or ($neighbour.letter -match $transitionsList[$actualTransition + 1]) -or ($neighbour.letter -lt $transitionsList[$actualTransition])) {
             $neighbours.Add($neighbour)
         }
     }
@@ -202,7 +202,11 @@ function Invoke-Part1 {
 
 #########################################################################################
 $filePath = ".\2022\12\input.txt"
+# $filePath = ".\2022\12\smallTest.txt"
 $lines = Get-Content $filePath
 
-$result = Invoke-Part1 -Lines $lines
-Write-Host "Result: $result" -ForegroundColor Green
+$time = Measure-Command -Expression {
+    $result = Invoke-Part1 -Lines $lines
+    Write-Host "Result: $result" -ForegroundColor Green
+}
+Write-Host "Time: $($time.TotalSeconds) seconds" -ForegroundColor Yellow
